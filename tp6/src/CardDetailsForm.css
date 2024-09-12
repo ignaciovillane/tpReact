@@ -1,0 +1,67 @@
+h2 {
+  text-align: center;
+}
+
+.payment-form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+  }
+  
+  .payment-form h3 {
+    text-align: center;
+  }
+  
+  .payment-form input,
+  .payment-form select {
+    width: 100%; /* Ambos toman el 100% del ancho del contenedor */
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box; /* Asegura que padding y border no alteren el tamaño total */
+  }
+  
+  .payment-form button {
+    width: 100%;
+    padding: 12px;  /* Aumentar el tamaño del botón para dispositivos móviles */
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .payment-form button:hover {
+    background-color: #45a049;
+  }
+  
+  .gateway-logos img {
+    width: 150px;
+    height: auto;
+    margin-top: 10px;
+  }
+  
+  /* Media Query para pantallas pequeñas */
+  @media (max-width: 600px) {
+    .payment-form {
+      padding: 10px;
+    }
+  
+    .payment-form h3 {
+      font-size: 1.5em;
+    }
+  
+    .payment-form button {
+      padding: 14px; /* Aumentar el tamaño del botón en móviles */
+    }
+  
+    .gateway-logos img {
+      width: 100px; /* Redimensionar las imágenes para pantallas pequeñas */
+      height: auto;
+    }
+  }
+  
