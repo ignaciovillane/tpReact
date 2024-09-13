@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PaymentForm from './PaymentForm';
 import CardDetailsPage from './CardDetailsPage';
-import "./App.css"
+import "./styles/App.css";
 
 function App() {
   return (

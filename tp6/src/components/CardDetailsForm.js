@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../CardDetailsForm.css'; // Importa el archivo CSS
+import '../styles/CardDetailsForm.css'; // Importa el archivo CSS
 
 const CardDetailsForm = ({ onPaymentProcess }) => {
   const [cardDetails, setCardDetails] = useState({ number: "", pin: "", name: "", documentType: "", documentNumber: "" });
@@ -23,9 +23,18 @@ const CardDetailsForm = ({ onPaymentProcess }) => {
     setCardType(e.target.value);
   };
 
+  const handleDocumentTypeChange = (e) => {
+    setCardDetails({
+      ...cardDetails,
+      documentType: e.target.value
+    });
+  };
+
   const handleGatewayChange = (e) => {
     setGateway(e.target.value);
   };
+
+  
 
   const validateFields = () => {
     const { number, pin, name, documentType, documentNumber } = cardDetails;
@@ -96,13 +105,14 @@ const CardDetailsForm = ({ onPaymentProcess }) => {
           value={cardDetails.name}
           onChange={handleCardDetailsChange}
         />
-        <input
-          type="text"
-          name="documentType"
-          placeholder="Tipo de documento"
-          value={cardDetails.documentType}
-          onChange={handleCardDetailsChange}
-        />
+        <div>
+          <label>Tipo de documento:</label>
+          <select value={cardDetails.documentType} onChange={handleDocumentTypeChange}>
+            <option value="">Seleccione tipo de documento</option>
+            <option value="DNI">DNI</option>
+            <option value="Pasaporte">Pasaporte</option>
+          </select>
+        </div>
         <input
           type="text"
           name="documentNumber"

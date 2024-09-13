@@ -1,6 +1,6 @@
 // Messages.js
 import React from 'react';
-import './Messages.css';
+import '../styles/Messages.css';
 
 const Messages = ({ messages }) => {
   return (

@@ -1,0 +1,74 @@
+h2 {
+  text-align: center;
+  color: #03045E; /* Color oscuro */
+  font-family: 'Serif'; /* Tipografía Serif */
+}
+
+.payment-form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #0077B6; /* Azul medio oscuro */
+  border-radius: 10px;
+  background-color: #CAF0F8; /* Casi blanco */
+  font-family: 'Serif'; /* Tipografía Serif */
+}
+
+.payment-form h3 {
+  text-align: center;
+  color: #03045E; /* Color oscuro */
+  font-family: 'Serif'; /* Tipografía Serif */
+}
+
+.payment-form input,
+.payment-form select {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #00B4D8; /* Azul claro */
+  box-sizing: border-box;
+  font-family: 'Serif'; /* Tipografía Serif */
+}
+
+.payment-form button {
+  width: 100%;
+  padding: 12px;
+  background-color: #0077B6; /* Azul medio oscuro */
+  color: white;
+  border: none;
+  border-radius: 20px; /* Esquinas más redondeadas */
+  cursor: pointer;
+  font-family: 'Serif'; /* Tipografía Serif */
+}
+
+.payment-form button:hover {
+  background-color: #00B4D8; /* Azul claro */
+}
+
+.gateway-logos img {
+  width: 150px;
+  height: auto;
+  margin-top: 10px;
+}
+
+/* Media Query para pantallas pequeñas */
+@media (max-width: 600px) {
+  .payment-form {
+    padding: 10px;
+  }
+
+  .payment-form h3 {
+    font-size: 1.5em;
+  }
+
+  .payment-form button {
+    padding: 14px;
+    border-radius: 20px; /* Esquinas más redondeadas en móviles */
+  }
+
+  .gateway-logos img {
+    width: 100px;
+    height: auto;
+  }
+}

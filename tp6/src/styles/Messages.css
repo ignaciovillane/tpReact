@@ -8,6 +8,7 @@
     border-radius: 10px;
     z-index: 1000;
     transition: opacity 0.5s ease;
+    font-family: 'Serif'; /* Tipografía Serif */
     opacity: 1;
   }
   
