@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Importamos useNavigate
-import TransportistaSelector from './components/TransportistaSelector';
-import PaymentMethodSelector from './components/PaymentMethodSelector';
-import Messages from './components/Messages';
+import TransportistaSelector from './TransportistaSelector';
+import PaymentMethodSelector from './PaymentMethodSelector';
+import Messages from './Messages';
 
 const PaymentForm = () => {
   const [transportista, setTransportista] = useState(null);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import CardDetailsForm from './components/CardDetailsForm';
-import Messages from './components/Messages';
+import CardDetailsForm from './CardDetailsForm';
+import Messages from './Messages';
 
 const CardDetailsPage = () => {
   const [messages, setMessages] = useState([]);
