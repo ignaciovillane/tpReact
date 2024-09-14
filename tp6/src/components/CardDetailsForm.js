@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import tarjetas from '../data/tarjetas'; // Importamos el mock de tarjetas
 import '../styles/CardDetailsForm.css'; // Importa el archivo CSS
 
 const CardDetailsForm = ({ onPaymentProcess }) => {
@@ -34,8 +35,6 @@ const CardDetailsForm = ({ onPaymentProcess }) => {
     setGateway(e.target.value);
   };
 
-  
-
   const validateFields = () => {
     const { number, pin, name, documentType, documentNumber } = cardDetails;
     
@@ -50,6 +49,21 @@ const CardDetailsForm = ({ onPaymentProcess }) => {
     return null; // Todo está correcto
   };
 
+  const validatePayment = () => {
+    const { number, pin, name, documentType, documentNumber } = cardDetails;
+
+    const matchingCard = tarjetas.find(tarjeta => 
+      tarjeta.numero === number &&
+      tarjeta.PIN === pin &&
+      tarjeta.nombreCompleto === name &&
+      tarjeta.tipoDocumento === documentType &&
+      tarjeta.numeroDocumento === documentNumber &&
+      tarjeta.tipo === cardType
+    );
+
+    return !!matchingCard; // Devuelve true si se encuentra una tarjeta que coincida
+  };
+
   const handlePaymentSubmit = (e) => {
     e.preventDefault();
     
@@ -61,13 +75,13 @@ const CardDetailsForm = ({ onPaymentProcess }) => {
       return;
     }
 
-    const isPaymentSuccessful = Math.random() > 0.5; // Simulación de éxito o rechazo aleatorio
+    const isPaymentSuccessful = validatePayment();
 
     if (isPaymentSuccessful) {
       const paymentNumber = generatePaymentNumber(); // Genera el número solo si el pago es exitoso
       onPaymentProcess("Pago procesado correctamente", paymentNumber);
     } else {
-      onPaymentProcess("Pago Rechazado, intente con otra tarjeta o método de pago", null, true); // No pasa número de pago si el pago es rechazado
+      onPaymentProcess("Pago Rechazado, verifique los datos de la tarjeta e intente nuevamente", null, true); // No pasa número de pago si el pago es rechazado
     }
   };
 
