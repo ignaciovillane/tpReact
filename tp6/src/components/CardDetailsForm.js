@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import tarjetas from '../data/tarjetas'; // Importamos el mock de tarjetas
 import '../styles/CardDetailsForm.css'; // Importa el archivo CSS
-
+import OrderStatus from './OrderStatus'; 
 const CardDetailsForm = ({ onPaymentProcess }) => {
   const [cardDetails, setCardDetails] = useState({ number: "", pin: "", name: "", documentType: "", documentNumber: "" });
   const [cardType, setCardType] = useState("");
   const [gateway, setGateway] = useState("");
+  const [orderStatus, setOrderStatus] = useState("Envío"); // Estado inicial del pedido
 
   const generatePaymentNumber = () => {
     return Math.floor(100000 + Math.random() * 900000); // Genera un número aleatorio de 6 dígitos
@@ -37,15 +38,14 @@ const CardDetailsForm = ({ onPaymentProcess }) => {
 
   const validateFields = () => {
     const { number, pin, name, documentType, documentNumber } = cardDetails;
-    
     if (!cardType) return "Debe seleccionar el tipo de tarjeta.";
+    if(!number && !pin && !name && !documentType && !documentNumber && !gateway) return "Debe ingresar los datos de la tarjeta.";
     if (!number || number.length < 16) return "Número de tarjeta inválido. Debe tener 16 dígitos.";
     if (!pin || pin.length < 4) return "El PIN debe tener 4 dígitos.";
     if (!name) return "Debe ingresar el nombre completo.";
     if (!documentType) return "Debe seleccionar un tipo de documento.";
     if (!documentNumber) return "Debe ingresar un número de documento.";
     if (!gateway) return "Debe seleccionar una pasarela de pago.";
-    
     return null; // Todo está correcto
   };
 
@@ -80,6 +80,8 @@ const CardDetailsForm = ({ onPaymentProcess }) => {
     if (isPaymentSuccessful) {
       const paymentNumber = generatePaymentNumber(); // Genera el número solo si el pago es exitoso
       onPaymentProcess("Pago procesado correctamente", paymentNumber);
+      // Cambiamos el estado del pedido a "Confirmado
+      setOrderStatus("Confirmado");
     } else {
       onPaymentProcess("Pago Rechazado, verifique los datos de la tarjeta e intente nuevamente", null, true); // No pasa número de pago si el pago es rechazado
     }
@@ -87,6 +89,7 @@ const CardDetailsForm = ({ onPaymentProcess }) => {
 
   return (
     <div className="payment-form">
+    <OrderStatus orderStatus={orderStatus} />
       <h3>Detalles de la Tarjeta</h3>
       <form onSubmit={handlePaymentSubmit}>
         <div>

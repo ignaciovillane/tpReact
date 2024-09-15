@@ -4,7 +4,6 @@ import Messages from './Messages';
 
 const CardDetailsPage = () => {
   const [messages, setMessages] = useState([]);
-
   const showFloatingMessage = (newMessage, paymentNumber, isError = false) => {
     // Limpiamos el mensaje antes de mostrar uno nuevo
     setMessages([]);
