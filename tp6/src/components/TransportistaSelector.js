@@ -7,7 +7,6 @@ const TransportistaSelector = ({ transportista, setTransportista }) => {
     setTransportista(selectedTransportista);
   };
 
-  // Función para convertir el rating en estrellas
   const getStarRating = (rating) => {
     const star = '⭐';
     return star.repeat(rating);

@@ -1,16 +1,36 @@
-import React, { useState } from 'react';
-import tarjetas from '../data/tarjetas'; // Importamos el mock de tarjetas
-import '../styles/CardDetailsForm.css'; // Importa el archivo CSS
+import React, { useState, useEffect } from 'react';
+import tarjetas from '../data/tarjetas'; 
+import '../styles/CardDetailsForm.css'; 
 import OrderStatus from './OrderStatus'; 
-import ConfirmationModal from './ConfirmationModal'; // Importa el modal de confirmación
+import ConfirmationModal from './ConfirmationModal'; 
 
 const CardDetailsForm = ({ onPaymentProcess }) => {
   const [cardDetails, setCardDetails] = useState({ number: "", pin: "", name: "", documentType: "", documentNumber: "" });
   const [cardType, setCardType] = useState("");
   const [gateway, setGateway] = useState("");
-  const [orderStatus, setOrderStatus] = useState("Pendiente"); // Estado inicial del pedido
-  const [showModal, setShowModal] = useState(false); // Estado para mostrar el modal
+  const [orderStatus, setOrderStatus] = useState(""); 
+  const [paymentNumber, setPaymentNumber] = useState(null); // Nuevo estado para el número de pago
+  const [confirmedPaymentMethod, setConfirmedPaymentMethod] = useState(null);
 
+  const [showModal, setShowModal] = useState(false); 
+
+  useEffect(() => {
+    const storedOrderStatus = sessionStorage.getItem("orderStatus");
+    const storedPaymentMethod = sessionStorage.getItem("confirmedPaymentMethod");
+    const storedPaymentNumber = sessionStorage.getItem("paymentNumber"); // Obtener el número de pago guardado
+
+    if (storedOrderStatus) {
+      setOrderStatus(storedOrderStatus);
+    }
+    
+    if (storedPaymentMethod) {
+      setConfirmedPaymentMethod(storedPaymentMethod);
+    }
+
+    if (storedPaymentNumber) {
+      setPaymentNumber(storedPaymentNumber); // Establecer el número de pago si ya existe
+    }
+  }, []);
   const generatePaymentNumber = () => {
     return Math.floor(100000 + Math.random() * 900000); // Genera un número aleatorio de 6 dígitos
   };
@@ -77,6 +97,11 @@ const CardDetailsForm = ({ onPaymentProcess }) => {
       return;
     }
 
+    if (confirmedPaymentMethod) {
+      onPaymentProcess("El pago ya fue procesado", null, true);
+      return;
+    }
+
     // Mostrar el modal de confirmación
     setShowModal(true);
   };
@@ -85,8 +110,12 @@ const CardDetailsForm = ({ onPaymentProcess }) => {
     const isPaymentSuccessful = validatePayment();
 
     if (isPaymentSuccessful) {
-      const paymentNumber = generatePaymentNumber(); // Genera el número solo si el pago es exitoso
+      const generatedPaymentNumber = generatePaymentNumber(); // Genera el número solo si el pago es exitoso
       onPaymentProcess("Pago procesado correctamente", paymentNumber);
+      const confirmedPaymentMethod = "tarjeta"
+      setConfirmedPaymentMethod(confirmedPaymentMethod)
+      setPaymentNumber(generatedPaymentNumber); // Guardar el número de pago
+      sessionStorage.setItem("paymentNumber", generatedPaymentNumber); // Guardarlo en sessionStorage
       setOrderStatus("Confirmado");
     } else {
       onPaymentProcess("Pago Rechazado, verifique los datos de la tarjeta e intente nuevamente", null, true);
@@ -97,7 +126,7 @@ const CardDetailsForm = ({ onPaymentProcess }) => {
 
   return (
     <div className="payment-form">
-      <OrderStatus orderStatus={orderStatus} />
+      <OrderStatus orderStatus={orderStatus} paymentNumber={paymentNumber}/>
       <h3>Detalles de la Tarjeta</h3>
       <form onSubmit={handlePaymentSubmit}>
         <div>

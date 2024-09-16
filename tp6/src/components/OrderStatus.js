@@ -1,6 +1,6 @@
 import React from 'react';
-// Componente para mostrar el estado del pedido
-const OrderStatus = ({ orderStatus }) => {
+
+const OrderStatus = ({ orderStatus, paymentNumber }) => {
   return (
     <div>
       <p>
@@ -11,7 +11,13 @@ const OrderStatus = ({ orderStatus }) => {
           "Pendiente"
         )}
       </p>
+      {orderStatus === 'Confirmado' && paymentNumber && (
+        <p>
+          Número de Pago: <span style={{ color: 'green' }}>{paymentNumber}</span> 
+        </p>
+      )}
     </div>
   );
 };
+
 export default OrderStatus;

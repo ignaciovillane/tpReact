@@ -4,29 +4,35 @@ import TransportistaSelector from './TransportistaSelector';
 import PaymentMethodSelector from './PaymentMethodSelector';
 import Messages from './Messages';
 import OrderStatus from './OrderStatus';
-import ConfirmationModal from './ConfirmationModal'; // Importamos el modal
+import ConfirmationModal from './ConfirmationModal'; 
 
 const PaymentForm = () => {
   const [transportista, setTransportista] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("");
   const [messages, setMessages] = useState([]);
-  const [orderStatus, setOrderStatus] = useState("Envío");
+  const [orderStatus, setOrderStatus] = useState("Pendiente");
   const [confirmedPaymentMethod, setConfirmedPaymentMethod] = useState(null);
-  const [showModal, setShowModal] = useState(false); // Estado para mostrar el modal
-  const [paymentAction, setPaymentAction] = useState(null); // Guarda si es tarjeta o contado
+  const [paymentNumber, setPaymentNumber] = useState(null); // Nuevo estado para el número de pago
+  const [showModal, setShowModal] = useState(false); 
+  const [paymentAction, setPaymentAction] = useState(null); 
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const storedOrderStatus = sessionStorage.getItem("orderStatus");
     const storedPaymentMethod = sessionStorage.getItem("confirmedPaymentMethod");
-    
+    const storedPaymentNumber = sessionStorage.getItem("paymentNumber"); // Obtener el número de pago guardado
+
     if (storedOrderStatus) {
       setOrderStatus(storedOrderStatus);
     }
     
     if (storedPaymentMethod) {
       setConfirmedPaymentMethod(storedPaymentMethod);
+    }
+
+    if (storedPaymentNumber) {
+      setPaymentNumber(storedPaymentNumber); // Establecer el número de pago si ya existe
     }
   }, []);
 
@@ -69,26 +75,26 @@ const PaymentForm = () => {
       return;
     }
 
-    // Verificar si es "contado al retirar" o "contado contra entrega"
     if (paymentMethod === "contado al retirar" || paymentMethod === "contado contra entrega") {
-      // Mostrar el modal de confirmación
       setShowModal(true);
-      setPaymentAction(paymentMethod); // Guardamos el tipo de pago seleccionado
+      setPaymentAction(paymentMethod); 
     } else if (paymentMethod === "tarjeta") {
-      // Si es tarjeta, redirigir directamente
       navigate("/card-details");
     }
   };
 
-  // Manejar la confirmación del modal
   const handleConfirm = () => {
-    setShowModal(false); // Ocultar el modal
+    setShowModal(false);
 
     if (paymentAction === "contado al retirar" || paymentAction === "contado contra entrega") {
-      const paymentNumber = generatePaymentNumber();
-      showFloatingMessage(`Pago procesado correctamente con ${paymentAction}`, paymentNumber);
+      const generatedPaymentNumber = generatePaymentNumber();
+      setPaymentNumber(generatedPaymentNumber); // Guardar el número de pago
+      sessionStorage.setItem("paymentNumber", generatedPaymentNumber); // Guardarlo en sessionStorage
+
+      showFloatingMessage(`Pago procesado correctamente con ${paymentAction}`, null, false);
       setOrderStatus("Confirmado");
       sessionStorage.setItem("orderStatus", "Confirmado");
+
       if (!confirmedPaymentMethod) {
         setConfirmedPaymentMethod(paymentAction);
         sessionStorage.setItem("confirmedPaymentMethod", paymentAction);
@@ -96,15 +102,14 @@ const PaymentForm = () => {
     }
   };
 
-  // Manejar la cancelación del modal
   const handleCancel = () => {
-    setShowModal(false); // Simplemente cerramos el modal sin realizar la acción
+    setShowModal(false); 
   };
 
   return (
     <div className="payment-form">
       <h2>Aceptar Cotización</h2>
-      <OrderStatus orderStatus={orderStatus} />
+      <OrderStatus orderStatus={orderStatus} paymentNumber={paymentNumber} />
       <Messages messages={messages} />
       <form onSubmit={handleSubmit}>
         <TransportistaSelector transportista={transportista} setTransportista={setTransportista} />
@@ -112,7 +117,6 @@ const PaymentForm = () => {
         <button type="submit">Confirmar Cotización</button>
       </form>
 
-      {/* Renderizamos el modal solo si el estado showModal es true */}
       {showModal && (
         <ConfirmationModal 
           message={`¿Está seguro de que desea procesar el pago con ${paymentMethod}?`}

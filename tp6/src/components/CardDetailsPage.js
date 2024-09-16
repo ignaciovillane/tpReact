@@ -14,10 +14,10 @@ const CardDetailsPage = () => {
       ? newMessage 
       : `${newMessage}${paymentNumber ? ` - Nº de Pago: ${paymentNumber}` : ''}`;
 
-    // A continuación, mostramos el nuevo mensaje
+    // Mostramos el nuevo mensaje
     setMessages([{ text: messageText, isError }]);
     
-    // Ocultar el mensaje después de 4 segundos
+    // Ocultamos el mensaje después de 4 segundos
     setTimeout(() => {
       setMessages([]);
     }, 4000);
@@ -27,7 +27,7 @@ const CardDetailsPage = () => {
     showFloatingMessage(message, paymentNumber, isError);
 
     if (!isError) {
-      // Actualizar el estado del pedido a "Confirmado" en sessionStorage
+      // Actualizamos el estado del pedido a "Confirmado" en sessionStorage
       sessionStorage.setItem("orderStatus", "Confirmado");
       sessionStorage.setItem("confirmedPaymentMethod", "tarjeta");
     }
