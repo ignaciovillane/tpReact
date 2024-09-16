@@ -4,11 +4,11 @@ const OrderStatus = ({ orderStatus }) => {
   return (
     <div>
       <p>
-        Estado del pedido:{" "}
+        Estado de pedido de envio:{" "}
         {orderStatus === 'Confirmado' ? (
           <span style={{ color: 'green' }}>Confirmado</span>
         ) : (
-          "Envío"
+          "Pendiente"
         )}
       </p>
     </div>

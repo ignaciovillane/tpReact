@@ -7,6 +7,12 @@ const TransportistaSelector = ({ transportista, setTransportista }) => {
     setTransportista(selectedTransportista);
   };
 
+  // Función para convertir el rating en estrellas
+  const getStarRating = (rating) => {
+    const star = '⭐';
+    return star.repeat(rating);
+  };
+
   return (
     <div>
       <label htmlFor="transportista">Transportista:</label>
@@ -14,7 +20,7 @@ const TransportistaSelector = ({ transportista, setTransportista }) => {
         <option value="">Seleccione un transportista</option>
         {transportistas.map((t) => (
           <option key={t.id} value={t.name}>
-            {t.name} (Calificación: {t.rating})
+            {t.name} (Calificación: {getStarRating(t.rating)})
           </option>
         ))}
       </select>

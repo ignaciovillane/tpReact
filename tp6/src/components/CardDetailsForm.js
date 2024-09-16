@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import tarjetas from '../data/tarjetas'; // Importamos el mock de tarjetas
 import '../styles/CardDetailsForm.css'; // Importa el archivo CSS
 import OrderStatus from './OrderStatus'; 
+import ConfirmationModal from './ConfirmationModal'; // Importa el modal de confirmación
+
 const CardDetailsForm = ({ onPaymentProcess }) => {
   const [cardDetails, setCardDetails] = useState({ number: "", pin: "", name: "", documentType: "", documentNumber: "" });
   const [cardType, setCardType] = useState("");
   const [gateway, setGateway] = useState("");
-  const [orderStatus, setOrderStatus] = useState("Envío"); // Estado inicial del pedido
+  const [orderStatus, setOrderStatus] = useState("Pendiente"); // Estado inicial del pedido
+  const [showModal, setShowModal] = useState(false); // Estado para mostrar el modal
 
   const generatePaymentNumber = () => {
     return Math.floor(100000 + Math.random() * 900000); // Genera un número aleatorio de 6 dígitos
@@ -66,30 +69,35 @@ const CardDetailsForm = ({ onPaymentProcess }) => {
 
   const handlePaymentSubmit = (e) => {
     e.preventDefault();
-    
+
     const validationError = validateFields();
-    
+
     if (validationError) {
-      // Mostrar el mensaje de error y no procesar el pago
-      onPaymentProcess(validationError, null, true);
+      onPaymentProcess(validationError, null, true); // Mostrar el mensaje de error y no procesar el pago
       return;
     }
 
+    // Mostrar el modal de confirmación
+    setShowModal(true);
+  };
+
+  const confirmPayment = () => {
     const isPaymentSuccessful = validatePayment();
 
     if (isPaymentSuccessful) {
       const paymentNumber = generatePaymentNumber(); // Genera el número solo si el pago es exitoso
       onPaymentProcess("Pago procesado correctamente", paymentNumber);
-      // Cambiamos el estado del pedido a "Confirmado
       setOrderStatus("Confirmado");
     } else {
-      onPaymentProcess("Pago Rechazado, verifique los datos de la tarjeta e intente nuevamente", null, true); // No pasa número de pago si el pago es rechazado
+      onPaymentProcess("Pago Rechazado, verifique los datos de la tarjeta e intente nuevamente", null, true);
     }
+
+    setShowModal(false); // Ocultar el modal después de procesar
   };
 
   return (
     <div className="payment-form">
-    <OrderStatus orderStatus={orderStatus} />
+      <OrderStatus orderStatus={orderStatus} />
       <h3>Detalles de la Tarjeta</h3>
       <form onSubmit={handlePaymentSubmit}>
         <div>
@@ -164,6 +172,15 @@ const CardDetailsForm = ({ onPaymentProcess }) => {
 
         <button type="submit">Procesar Pago</button>
       </form>
+
+      {/* Renderizar el modal si showModal es true */}
+      {showModal && (
+        <ConfirmationModal 
+          message="¿Está seguro de que desea procesar este pago?" 
+          onConfirm={confirmPayment} 
+          onCancel={() => setShowModal(false)} 
+        />
+      )}
     </div>
   );
 };

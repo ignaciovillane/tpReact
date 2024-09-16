@@ -4,6 +4,7 @@ import Messages from './Messages';
 
 const CardDetailsPage = () => {
   const [messages, setMessages] = useState([]);
+
   const showFloatingMessage = (newMessage, paymentNumber, isError = false) => {
     // Limpiamos el mensaje antes de mostrar uno nuevo
     setMessages([]);
@@ -24,6 +25,12 @@ const CardDetailsPage = () => {
 
   const handlePaymentProcess = (message, paymentNumber, isError = false) => {
     showFloatingMessage(message, paymentNumber, isError);
+
+    if (!isError) {
+      // Actualizar el estado del pedido a "Confirmado" en sessionStorage
+      sessionStorage.setItem("orderStatus", "Confirmado");
+      sessionStorage.setItem("confirmedPaymentMethod", "tarjeta");
+    }
   };
 
   return (
