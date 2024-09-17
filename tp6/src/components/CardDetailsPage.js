@@ -1,43 +1,37 @@
-import React, { useState } from 'react';
+import React from 'react';
 import CardDetailsForm from './CardDetailsForm';
-import Messages from './Messages';
+import Notification, { showSuccessNotification, showErrorNotification } from './Notifications'; // Importamos el CustomToast y las funciones
 
 const CardDetailsPage = () => {
-  const [messages, setMessages] = useState([]);
 
-  const showFloatingMessage = (newMessage, paymentNumber, isError = false) => {
-    // Limpiamos el mensaje antes de mostrar uno nuevo
-    setMessages([]);
-    
-    // Condicionamos el número de pago solo si el pago fue exitoso
+  const handlePaymentProcess = (message, paymentMethod, isError = false) => {
+    // Simplificamos el mensaje de confirmación de pago
     const messageText = isError 
-      ? newMessage 
-      : `${newMessage}${paymentNumber ? ` - Nº de Pago: ${paymentNumber}` : ''}`;
+      ? message 
+      : `Pago procesado correctamente con ${paymentMethod}`;
 
-    // Mostramos el nuevo mensaje
-    setMessages([{ text: messageText, isError }]);
-    
-    // Ocultamos el mensaje después de 4 segundos
-    setTimeout(() => {
-      setMessages([]);
-    }, 4000);
-  };
+    // Usamos el toast en lugar del manejo de mensajes anterior
+    if (isError) {
+      showErrorNotification(messageText);
+    } else {
+      showSuccessNotification(messageText);
+      
 
-  const handlePaymentProcess = (message, paymentNumber, isError = false) => {
-    showFloatingMessage(message, paymentNumber, isError);
-
-    if (!isError) {
+      showSuccessNotification(`Notificación SMS enviada a transportista`)
+      showSuccessNotification(`Email enviado a transportista.`);
       // Actualizamos el estado del pedido a "Confirmado" en sessionStorage
       sessionStorage.setItem("orderStatus", "Confirmado");
-      sessionStorage.setItem("confirmedPaymentMethod", "tarjeta");
+      sessionStorage.setItem("confirmedPaymentMethod", paymentMethod);
     }
   };
+
+
 
   return (
     <div>
       <h2>Pago con tarjeta</h2>
       <CardDetailsForm onPaymentProcess={handlePaymentProcess} />
-      <Messages messages={messages} />
+      <Notification />
     </div>
   );
 };

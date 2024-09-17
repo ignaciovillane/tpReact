@@ -1,24 +1,38 @@
-/* Messages.css */
 .message {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 20px;
-    border-radius: 10px;
-    z-index: 1000;
-    transition: opacity 0.5s ease;
-    font-family: 'Serif'; /* Tipografía Serif */
-    opacity: 1;
-  }
-  
-  .success-message {
-    background-color: #4caf50;
-    color: white;
-  }
-  
-  .error-message {
-    background-color: #f44336;
-    color: white;
-  }
-  
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 1000;
+  transition: opacity 0.5s ease;
+  font-family: 'Serif';
+  opacity: 1;
+  width: 80%;
+  max-width: 400px;
+  text-align: center;
+  margin-bottom: 10px; /* Añadir margen inferior entre mensajes */
+}
+
+.success-message {
+  background-color: #4caf50;
+  color: white;
+}
+
+.error-message {
+  background-color: #f44336;
+  color: white;
+}
+
+/* Estilo para manejar múltiples mensajes que aparezcan en distintas posiciones */
+.message:nth-child(1) {
+  top: 30%;
+}
+
+.message:nth-child(2) {
+  top: 40%;
+}
+
+.message:nth-child(3) {
+  top: 50%;
+}

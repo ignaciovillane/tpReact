@@ -3,8 +3,12 @@ import tarjetas from '../data/tarjetas';
 import '../styles/CardDetailsForm.css'; 
 import OrderStatus from './OrderStatus'; 
 import ConfirmationModal from './ConfirmationModal'; 
+import { useNavigate } from 'react-router-dom'; // Importamos useNavigate
+
 
 const CardDetailsForm = ({ onPaymentProcess }) => {
+  const navigate = useNavigate(); // Hook para navegar entre rutas
+
   const [cardDetails, setCardDetails] = useState({ number: "", pin: "", name: "", documentType: "", documentNumber: "" });
   const [cardType, setCardType] = useState("");
   const [gateway, setGateway] = useState("");
@@ -35,6 +39,10 @@ const CardDetailsForm = ({ onPaymentProcess }) => {
     return Math.floor(100000 + Math.random() * 900000); // Genera un número aleatorio de 6 dígitos
   };
 
+  const handleGoBack = () => {
+    // Volver a la página principal para seleccionar otro método de pago
+    navigate('/');
+  };
   const handleCardDetailsChange = (e) => {
     const { name, value } = e.target;
     const newValue = (name === "number" || name === "pin" || name === "documentNumber") ? value.replace(/\D/, '') : value;
@@ -42,6 +50,13 @@ const CardDetailsForm = ({ onPaymentProcess }) => {
       ...cardDetails,
       [name]: newValue
     });
+  };
+
+  const handleResetSession = () => {
+    sessionStorage.clear();
+    setOrderStatus("Pendiente");
+    setConfirmedPaymentMethod(null);
+    setPaymentNumber(null);
   };
 
   const handleCardTypeChange = (e) => {
@@ -111,14 +126,17 @@ const CardDetailsForm = ({ onPaymentProcess }) => {
 
     if (isPaymentSuccessful) {
       const generatedPaymentNumber = generatePaymentNumber(); // Genera el número solo si el pago es exitoso
-      onPaymentProcess("Pago procesado correctamente", paymentNumber);
       const confirmedPaymentMethod = "tarjeta"
       setConfirmedPaymentMethod(confirmedPaymentMethod)
       setPaymentNumber(generatedPaymentNumber); // Guardar el número de pago
+
+      onPaymentProcess("Pago procesado correctamente", confirmedPaymentMethod);
+
+
       sessionStorage.setItem("paymentNumber", generatedPaymentNumber); // Guardarlo en sessionStorage
       setOrderStatus("Confirmado");
     } else {
-      onPaymentProcess("Pago Rechazado, verifique los datos de la tarjeta e intente nuevamente", null, true);
+      onPaymentProcess("Pago Rechazado, verifique los datos de la tarjeta e intente nuevamente o pruebe con otro medio de pago", null, true);
     }
 
     setShowModal(false); // Ocultar el modal después de procesar
@@ -200,6 +218,9 @@ const CardDetailsForm = ({ onPaymentProcess }) => {
         </div>
 
         <button type="submit">Procesar Pago</button>
+        <button onClick={handleGoBack} style={{ marginTop: '20px' }}>
+        Volver a elegir medio de pago
+      </button>
       </form>
 
       {/* Renderizar el modal si showModal es true */}
@@ -210,6 +231,12 @@ const CardDetailsForm = ({ onPaymentProcess }) => {
           onCancel={() => setShowModal(false)} 
         />
       )}
+    <button 
+      onClick={handleResetSession} 
+      style={{ position: 'fixed',bottom: '30px', right: '10px', padding: '5px 10px', width: 'auto', display: 'inline-block' }}
+    >
+      Reiniciar Sesión
+    </button>
     </div>
   );
 };

@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TransportistaSelector from './TransportistaSelector';
 import PaymentMethodSelector from './PaymentMethodSelector';
-import Messages from './Messages';
 import OrderStatus from './OrderStatus';
 import ConfirmationModal from './ConfirmationModal'; 
+import Notification, { showSuccessNotification, showErrorNotification } from './Notifications'; // Importamos el CustomToast y las funciones
 
 const PaymentForm = () => {
   const [transportista, setTransportista] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("");
-  const [messages, setMessages] = useState([]);
   const [orderStatus, setOrderStatus] = useState("Pendiente");
   const [confirmedPaymentMethod, setConfirmedPaymentMethod] = useState(null);
   const [paymentNumber, setPaymentNumber] = useState(null); // Nuevo estado para el número de pago
@@ -40,38 +39,24 @@ const PaymentForm = () => {
     return Math.floor(Math.random() * 1000000);
   };
 
-  const showFloatingMessage = (newMessage, paymentNumber, isError = false) => {
-    setMessages([]);
-
-    const messageText = isError 
-      ? newMessage 
-      : `${newMessage}${paymentNumber ? ` - Nº de Pago: ${paymentNumber}` : ''}`;
-
-    setMessages([{ text: messageText, isError }]);
-
-    setTimeout(() => {
-      setMessages([]);
-    }, 4000);
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!transportista && !paymentMethod) {
-      showFloatingMessage("Debe seleccionar un transportista y una forma de pago.", null, true);
+      showErrorNotification("Debe seleccionar un transportista y un medio de pago");
       return;
     }
     if (!transportista) {
-      showFloatingMessage("Debe seleccionar un transportista.", null, true);
+      showErrorNotification("Debe seleccionar un transportista");
       return;
     }
     if (!paymentMethod) {
-      showFloatingMessage("Debe seleccionar una forma de pago.", null, true);
+      showErrorNotification("Debe seleccionar un medio de pago");
       return;
     }
 
     if (confirmedPaymentMethod) {
-      showFloatingMessage(`El pago ya fue procesado`, null, true);
+      showErrorNotification("El pago ya fue procesado");
       return;
     }
 
@@ -91,7 +76,11 @@ const PaymentForm = () => {
       setPaymentNumber(generatedPaymentNumber); // Guardar el número de pago
       sessionStorage.setItem("paymentNumber", generatedPaymentNumber); // Guardarlo en sessionStorage
 
-      showFloatingMessage(`Pago procesado correctamente con ${paymentAction}`, null, false);
+      // Mostrar múltiples mensajes
+      showSuccessNotification(`Pago procesado correctamente con ${paymentAction}`);
+      showSuccessNotification(`Notificación SMS enviada a transportista`)
+      showSuccessNotification(`Email enviado a transportista.`);
+
       setOrderStatus("Confirmado");
       sessionStorage.setItem("orderStatus", "Confirmado");
 
@@ -106,11 +95,17 @@ const PaymentForm = () => {
     setShowModal(false); 
   };
 
+  const handleResetSession = () => {
+    sessionStorage.clear();
+    setOrderStatus("Pendiente");
+    setConfirmedPaymentMethod(null);
+    setPaymentNumber(null);
+  };
+
   return (
     <div className="payment-form">
       <h2>Aceptar Cotización</h2>
       <OrderStatus orderStatus={orderStatus} paymentNumber={paymentNumber} />
-      <Messages messages={messages} />
       <form onSubmit={handleSubmit}>
         <TransportistaSelector transportista={transportista} setTransportista={setTransportista} />
         <PaymentMethodSelector paymentMethod={paymentMethod} setPaymentMethod={setPaymentMethod} />
@@ -124,7 +119,15 @@ const PaymentForm = () => {
           onCancel={handleCancel}
         />
       )}
+      <button 
+      onClick={handleResetSession} 
+      style={{ position: 'fixed',bottom: '30px', right: '10px', padding: '5px 10px', width: 'auto', display: 'inline-block' }}
+    >
+      Reiniciar Sesión
+    </button>
+    <Notification />
     </div>
+
   );
 };
 
