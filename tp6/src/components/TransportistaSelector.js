@@ -2,9 +2,10 @@ import React from 'react';
 import transportistas from '../data/transportistas';
 
 const TransportistaSelector = ({ transportista, setTransportista }) => {
-  const handleTransportistaChange = (e) => {
-    const selectedTransportista = transportistas.find(t => t.name === e.target.value);
+
+  const handleSelectTransportista = (selectedTransportista) => {
     setTransportista(selectedTransportista);
+    console.log(selectedTransportista)
   };
 
   const getStarRating = (rating) => {
@@ -14,22 +15,39 @@ const TransportistaSelector = ({ transportista, setTransportista }) => {
 
   return (
     <div>
-      <label htmlFor="transportista">Transportista:</label>
-      <select id="transportista" value={transportista?.name || ""} onChange={handleTransportistaChange}>
-        <option value="">Seleccione un transportista</option>
-        {transportistas.map((t) => (
-          <option key={t.id} value={t.name}>
-            {t.name} (Calificación: {getStarRating(t.rating)})
-          </option>
-        ))}
-      </select>
-      {transportista && (
-        <div className="details">
-          <p><strong>Fecha de Retiro:</strong> {transportista.retiro}</p>
-          <p><strong>Fecha de Entrega:</strong> {transportista.entrega}</p>
-          <p><strong>Importe del Viaje:</strong> ${transportista.importe}</p>
-        </div>
-      )}
+      <p>Cotizaciones disponibles:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Calificación</th>
+            <th>Fecha de Retiro</th>
+            <th>Fecha de Entrega</th>
+            <th>Importe del Viaje</th>
+            <th>Seleccionar</th>
+          </tr>
+        </thead>
+        <tbody>
+          {transportistas.map((t) => (
+            <tr key={t.id}>
+              <td>{t.name}</td>
+              <td>{getStarRating(t.rating)}</td>
+              <td>{t.retiro}</td>
+              <td>{t.entrega}</td>
+              <td>${t.importe}</td>
+              <td>
+                <button
+                  onClick={() => handleSelectTransportista(t)}
+                  disabled={transportista?.id === t.id}
+                  className={transportista?.id === t.id ? "table-button selected" : "table button"}
+                >
+                  {transportista?.id === t.id ? "Seleccionado" : "Seleccionar"}
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

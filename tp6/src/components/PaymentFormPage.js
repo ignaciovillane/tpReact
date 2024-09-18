@@ -64,7 +64,7 @@ const PaymentForm = () => {
       setShowModal(true);
       setPaymentAction(paymentMethod); 
     } else if (paymentMethod === "tarjeta") {
-      navigate("/card-details");
+      navigate("/card-details", {state: {transportista}});
     }
   };
 

@@ -1,89 +1,147 @@
 /* Estilos para el formulario */
-
 .payment-form {
-  max-width: 400px;
+  width: 100%;
+  max-width: 600px; 
   margin: 0 auto;
   padding: 20px;
-  border: 1px solid #0077B6; /* Azul medio oscuro */
+  border: 1px solid #0077B6; 
   border-radius: 10px;
-  background-color: #CAF0F8; /* Casi blanco */
-  font-family: 'Serif'; /* Tipografía Serif */
+  background-color: #CAF0F8; 
+  font-family: 'Serif';
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .payment-form h2 {
   text-align: center;
-  color: #03045E; /* Color oscuro */
-  font-family: 'Serif'; /* Tipografía Serif */
+  color: #03045E; 
+  margin-bottom: 20px; 
 }
 
 .payment-form input,
 .payment-form select {
-  width: 100%; 
+  width: calc(100% - 20px); 
   padding: 10px;
   margin: 10px 0;
   border-radius: 5px;
-  border: 1px solid #00B4D8; /* Azul claro */
+  border: 1px solid #00B4D8; 
   box-sizing: border-box;
-  font-family: 'Serif'; /* Tipografía Serif */
+  font-family: 'Serif';
 }
 
 .payment-form button {
   width: 100%;
   padding: 12px;
-  background-color: #0077B6; /* Azul medio oscuro */
-  color: white;
+  background-color: #0077B6; 
   border: none;
-  border-radius: 20px; /* Esquinas más redondeadas */
+  border-radius: 20px; 
   cursor: pointer;
-  font-family: 'Serif'; /* Tipografía Serif */
+  font-family: 'Serif';
+  transition: background-color 0.3s; 
+  font: solid #CAF0F8;
 }
 
 .payment-form button:hover {
-  background-color: #00B4D8; /* Azul claro */
+  background-color: #00B4D8;
 }
 
 .details {
   margin: 10px 0;
   padding: 10px;
-  background-color: #90E0EF; /* Azul muy claro */
+  background-color: #90E0EF; 
   border-radius: 5px;
-  font-family: 'Serif'; /* Tipografía Serif */
+  font-family: 'Serif';
 }
 
 .details p {
   margin: 5px 0;
   font-size: 1.1em;
-  color: #03045E; /* Color oscuro */
-  font-family: 'Serif'; /* Tipografía Serif */
+  color: #03045E; 
 }
 
-.gateway-logos img {
-  width: 150px;
-  height: auto;
-  margin-top: 10px;
+
+.table-container {
+  width: 100%;
+  overflow-x: auto; 
+  margin-top: 20px; 
 }
 
-/* Media Query para pantallas pequeñas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Serif';
+  font-size: 1em;
+  
+}
+
+table, th, td {
+  border: 1px solid #0077B6; 
+}
+
+th, td {
+  padding: 12px;
+  text-align: center;
+}
+
+th {
+  background-color: #00B4D8; 
+  color: black;
+}
+
+td {
+  background-color: #CAF0F8; 
+}
+
+/* Estilo para botones dentro de la tabla */
+.table-button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  background-color: #0077B6; 
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s; 
+}
+
+.table-button:hover {
+  background-color: #00B4D8; 
+}
+
+.table-button:active {
+  background-color: #005F8A; 
+}
+
+.table-button.selected {
+  background-color: #03045E; 
+}
+
 @media (max-width: 600px) {
+  .table-button {
+    padding: 6px 8px;
+    font-size: 0.8em; 
+  }
+
+  th, td {
+    padding: 6px;
+    font-size: 0.8em; 
+  }
+
+  table {
+    font-size: 0.85em;
+  }
+  
+  .payment-form {
+    padding: 15px;
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 400px) {
   .payment-form {
     padding: 10px;
   }
 
-  .payment-form h2 {
-    font-size: 1.5em;
-  }
-
-  .payment-form button {
-    padding: 14px;
-    border-radius: 20px; /* Esquinas más redondeadas en móviles */
-  }
-
-  .gateway-logos img {
-    width: 100px;
-    height: auto;
-  }
-
-  .details p {
-    font-size: 1em;
+  table {
+    display: block;
+    overflow-x: auto;
   }
 }

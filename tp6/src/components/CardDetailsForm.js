@@ -3,10 +3,12 @@ import tarjetas from '../data/tarjetas';
 import '../styles/CardDetailsForm.css'; 
 import OrderStatus from './OrderStatus'; 
 import ConfirmationModal from './ConfirmationModal'; 
-import { useNavigate } from 'react-router-dom'; // Importamos useNavigate
+import { useLocation, useNavigate } from 'react-router-dom'; // Importamos useNavigate
 
 
 const CardDetailsForm = ({ onPaymentProcess }) => {
+  const location = useLocation();
+  const transportista = location.state?.transportista;
   const navigate = useNavigate(); // Hook para navegar entre rutas
 
   const [cardDetails, setCardDetails] = useState({ number: "", pin: "", name: "", documentType: "", documentNumber: "" });
@@ -45,7 +47,7 @@ const CardDetailsForm = ({ onPaymentProcess }) => {
   };
   const handleCardDetailsChange = (e) => {
     const { name, value } = e.target;
-    const newValue = (name === "number" || name === "pin" || name === "documentNumber") ? value.replace(/\D/, '') : value;
+    const newValue = (name === "number" || name === "pin" || (name === "documentNumber" && cardDetails.documentType === "DNI")) ? value.replace(/\D/, '') : value;
     setCardDetails({
       ...cardDetails,
       [name]: newValue
@@ -99,7 +101,16 @@ const CardDetailsForm = ({ onPaymentProcess }) => {
       tarjeta.tipo === cardType
     );
 
-    return !!matchingCard; // Devuelve true si se encuentra una tarjeta que coincida
+    if (matchingCard) {
+      if (parseFloat(matchingCard.saldo) >= parseFloat(transportista.importe)) {
+        return true; // El saldo es suficiente
+      } else {
+        return false; // El saldo no es suficiente
+      }
+    }
+  
+    return false; // No se encontró una tarjeta válida
+
   };
 
   const handlePaymentSubmit = (e) => {

@@ -5,7 +5,8 @@ const tarjetas = [{
       PIN: "1234",
       nombreCompleto: "Juan Perez",
       tipoDocumento: "DNI",
-      numeroDocumento: "32123456"
+      numeroDocumento: "32123456",
+      saldo: "2000"
 
 },
 {
@@ -14,7 +15,8 @@ const tarjetas = [{
     PIN: "5678",
     nombreCompleto: "Ana Garcia",
     tipoDocumento: "Pasaporte",
-    numeroDocumento: "XG123456"
+    numeroDocumento: "XG123456",
+    saldo: "500"
 
 }];
 
