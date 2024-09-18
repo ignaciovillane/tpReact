@@ -4,6 +4,7 @@ import TransportistaSelector from './TransportistaSelector';
 import PaymentMethodSelector from './PaymentMethodSelector';
 import OrderStatus from './OrderStatus';
 import ConfirmationModal from './ConfirmationModal'; 
+import { sendEmail } from './SendEmail'; // Importamos la función
 import Notification, { showSuccessNotification, showErrorNotification } from './Notifications'; // Importamos el CustomToast y las funciones
 
 const PaymentForm = () => {
@@ -34,10 +35,6 @@ const PaymentForm = () => {
       setPaymentNumber(storedPaymentNumber); // Establecer el número de pago si ya existe
     }
   }, []);
-
-  const generatePaymentNumber = () => {
-    return Math.floor(Math.random() * 1000000);
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -72,10 +69,6 @@ const PaymentForm = () => {
     setShowModal(false);
 
     if (paymentAction === "contado al retirar" || paymentAction === "contado contra entrega") {
-      const generatedPaymentNumber = generatePaymentNumber();
-      setPaymentNumber(generatedPaymentNumber); // Guardar el número de pago
-      sessionStorage.setItem("paymentNumber", generatedPaymentNumber); // Guardarlo en sessionStorage
-
       // Mostrar múltiples mensajes
       showSuccessNotification(`Pago procesado correctamente con ${paymentAction}`);
       showSuccessNotification(`Notificación SMS enviada a transportista`)
@@ -88,6 +81,9 @@ const PaymentForm = () => {
         setConfirmedPaymentMethod(paymentAction);
         sessionStorage.setItem("confirmedPaymentMethod", paymentAction);
       }
+
+      sendEmail(transportista, paymentAction);
+
     }
   };
 

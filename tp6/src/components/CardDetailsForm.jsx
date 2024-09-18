@@ -4,6 +4,7 @@ import '../styles/CardDetailsForm.css';
 import OrderStatus from './OrderStatus'; 
 import ConfirmationModal from './ConfirmationModal'; 
 import { useLocation, useNavigate } from 'react-router-dom'; // Importamos useNavigate
+import { sendEmail } from './SendEmail'; // Importamos la función
 
 
 const CardDetailsForm = ({ onPaymentProcess }) => {
@@ -11,7 +12,7 @@ const CardDetailsForm = ({ onPaymentProcess }) => {
   const transportista = location.state?.transportista;
   const navigate = useNavigate(); // Hook para navegar entre rutas
 
-  const [cardDetails, setCardDetails] = useState({ number: "", pin: "", name: "", documentType: "", documentNumber: "" });
+  const [cardDetails, setCardDetails] = useState({ number: "", pin: "", name: "", documentType: "", documentNumber: "", expirationDate: ""});
   const [cardType, setCardType] = useState("");
   const [gateway, setGateway] = useState("");
   const [orderStatus, setOrderStatus] = useState(""); 
@@ -77,24 +78,31 @@ const CardDetailsForm = ({ onPaymentProcess }) => {
   };
 
   const validateFields = () => {
-    const { number, pin, name, documentType, documentNumber } = cardDetails;
+    const { number, pin,expirationDate, name, documentType, documentNumber } = cardDetails;
     if (!cardType) return "Debe seleccionar el tipo de tarjeta.";
     if(!number && !pin && !name && !documentType && !documentNumber && !gateway) return "Debe ingresar los datos de la tarjeta.";
     if (!number || number.length < 16) return "Número de tarjeta inválido. Debe tener 16 dígitos.";
     if (!pin || pin.length < 4) return "El PIN debe tener 4 dígitos.";
+    if (!expirationDate) return "Debe ingresar la fecha de vencimiento."; 
     if (!name) return "Debe ingresar el nombre completo.";
     if (!documentType) return "Debe seleccionar un tipo de documento.";
     if (!documentNumber) return "Debe ingresar un número de documento.";
     if (!gateway) return "Debe seleccionar una pasarela de pago.";
+
+    const [month, year] = expirationDate.split('/');
+    if (!month || !year || month.length !== 2 || year.length !== 2) {
+      return "Formato de fecha de vencimiento inválido. Use MM/AA.";
+    }
     return null; // Todo está correcto
   };
 
   const validatePayment = () => {
-    const { number, pin, name, documentType, documentNumber } = cardDetails;
+    const { number, pin, name, documentType, documentNumber, expirationDate } = cardDetails;
 
     const matchingCard = tarjetas.find(tarjeta => 
       tarjeta.numero === number &&
       tarjeta.PIN === pin &&
+      tarjeta.fechaVencimiento === expirationDate && 
       tarjeta.nombreCompleto === name &&
       tarjeta.tipoDocumento === documentType &&
       tarjeta.numeroDocumento === documentNumber &&
@@ -136,16 +144,17 @@ const CardDetailsForm = ({ onPaymentProcess }) => {
     const isPaymentSuccessful = validatePayment();
 
     if (isPaymentSuccessful) {
-      const generatedPaymentNumber = generatePaymentNumber(); // Genera el número solo si el pago es exitoso
+      const generatedPaymentNumber = generatePaymentNumber(); 
       const confirmedPaymentMethod = "tarjeta"
       setConfirmedPaymentMethod(confirmedPaymentMethod)
-      setPaymentNumber(generatedPaymentNumber); // Guardar el número de pago
+      setPaymentNumber(generatedPaymentNumber); 
 
       onPaymentProcess("Pago procesado correctamente", confirmedPaymentMethod);
 
 
-      sessionStorage.setItem("paymentNumber", generatedPaymentNumber); // Guardarlo en sessionStorage
+      sessionStorage.setItem("paymentNumber", generatedPaymentNumber); 
       setOrderStatus("Confirmado");
+      sendEmail(transportista, confirmedPaymentMethod);
     } else {
       onPaymentProcess("Pago Rechazado, verifique los datos de la tarjeta e intente nuevamente o pruebe con otro medio de pago", null, true);
     }
@@ -179,6 +188,14 @@ const CardDetailsForm = ({ onPaymentProcess }) => {
           name="pin"
           placeholder="PIN (4 dígitos)"
           value={cardDetails.pin}
+          onChange={handleCardDetailsChange}
+        />
+
+        <input
+          type="text"
+          name="expirationDate" 
+          placeholder="Fecha de vencimiento (MM/AA)"
+          value={cardDetails.expirationDate}
           onChange={handleCardDetailsChange}
         />
         <input

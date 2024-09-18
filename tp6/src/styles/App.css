@@ -1,147 +1,176 @@
+/* Estilos para el body */
+body {
+  display: flex;
+  justify-content: center;
+  min-height: 100vh; /* Asegura que el contenido ocupe toda la altura de la pantalla */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #f0f0f0; /* O cualquier color de fondo que prefieras */
+}
+
 /* Estilos para el formulario */
 .payment-form {
   width: 100%;
-  max-width: 600px; 
-  margin: 0 auto;
+  max-width: 800px;
+  margin: 0 auto; /* Asegura que se mantenga centrado horizontalmente */
   padding: 20px;
-  border: 1px solid #0077B6; 
+  border: 1px solid #0077B6;
   border-radius: 10px;
-  background-color: #CAF0F8; 
+  background-color: #CAF0F8;
   font-family: 'Serif';
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative; /* Mantiene la estructura en su lugar */
 }
 
 .payment-form h2 {
   text-align: center;
-  color: #03045E; 
-  margin-bottom: 20px; 
+  color: #03045E;
+  margin-bottom: 20px;
 }
 
 .payment-form input,
 .payment-form select {
-  width: calc(100% - 20px); 
+  width: 100%;
   padding: 10px;
   margin: 10px 0;
   border-radius: 5px;
-  border: 1px solid #00B4D8; 
-  box-sizing: border-box;
+  border: 1px solid #00B4D8;
   font-family: 'Serif';
 }
 
 .payment-form button {
   width: 100%;
   padding: 12px;
-  background-color: #0077B6; 
+  background-color: #0077B6;
   border: none;
-  border-radius: 20px; 
+  border-radius: 20px;
   cursor: pointer;
   font-family: 'Serif';
-  transition: background-color 0.3s; 
-  font: solid #CAF0F8;
+  color: white;
+  transition: background-color 0.3s;
 }
 
 .payment-form button:hover {
   background-color: #00B4D8;
 }
 
-.details {
-  margin: 10px 0;
-  padding: 10px;
-  background-color: #90E0EF; 
-  border-radius: 5px;
-  font-family: 'Serif';
-}
-
-.details p {
-  margin: 5px 0;
-  font-size: 1.1em;
-  color: #03045E; 
-}
-
-
+/* Ajustes para la tabla */
 .table-container {
   width: 100%;
-  overflow-x: auto; 
-  margin-top: 20px; 
+  overflow-x: auto;
+  margin-top: 20px;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
   font-family: 'Serif';
   font-size: 1em;
-  
-}
-
-table, th, td {
-  border: 1px solid #0077B6; 
+  margin: 0 auto;
+  border: 1px solid #0077B6;
 }
 
 th, td {
   padding: 12px;
   text-align: center;
+  white-space: nowrap;
+  border: 1px solid #0077B6;
+
 }
 
 th {
-  background-color: #00B4D8; 
+  background-color: #00B4D8;
   color: black;
 }
 
 td {
-  background-color: #CAF0F8; 
+  background-color: #CAF0F8;
 }
 
-/* Estilo para botones dentro de la tabla */
+/* Botones dentro de la tabla */
 .table-button {
   padding: 8px 12px;
   border: none;
   border-radius: 5px;
-  background-color: #0077B6; 
+  background-color: #0077B6;
   color: white;
   cursor: pointer;
-  transition: background-color 0.3s; 
+  transition: background-color 0.3s;
+  white-space: nowrap;
+
 }
 
 .table-button:hover {
-  background-color: #00B4D8; 
+  background-color: #00B4D8;
 }
 
 .table-button:active {
-  background-color: #005F8A; 
+  background-color: #005F8A;
 }
 
 .table-button.selected {
-  background-color: #03045E; 
+  background-color: #03045E;
+}
+
+/* Media queries para pantallas pequeñas */
+@media (max-width: 768px) {
+  .payment-form {
+    padding: 15px;
+    font-size: 0.9em;
+  }
+
+  th, td {
+    padding: 8px;
+    font-size: 0.85em;
+  }
+
+  .table-button {
+    padding: 6px 10px;
+  }
 }
 
 @media (max-width: 600px) {
-  .table-button {
-    padding: 6px 8px;
-    font-size: 0.8em; 
+  .payment-form {
+    padding: 10px;
+    font-size: 0.85em;
+  }
+
+  table {
+    font-size: 0.8em;
+    white-space: nowrap;
   }
 
   th, td {
     padding: 6px;
-    font-size: 0.8em; 
+    font-size: 0.75em;
   }
 
-  table {
-    font-size: 0.85em;
-  }
-  
-  .payment-form {
-    padding: 15px;
-    font-size: 0.9em;
+  .table-button {
+    padding: 5px 8px;
   }
 }
 
 @media (max-width: 400px) {
   .payment-form {
-    padding: 10px;
+    padding: 8px;
+    font-size: 0.8em;
   }
 
   table {
-    display: block;
-    overflow-x: auto;
+    width: 100%;
+    min-width: 100%;
+  }
+
+  th, td {
+    padding: 4px;
+  }
+
+  .table-button {
+    padding: 4px 6px;
   }
 }
