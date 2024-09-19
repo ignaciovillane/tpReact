@@ -4,7 +4,7 @@ const tarjetas = [
       tipo: "debito",
       numero: "4111111111111111",
       PIN: "1234",
-      fechaVencimiento: "12/25",
+      fechaVencimiento: "12/23",
       nombreCompleto: "Juan Perez",
       tipoDocumento: "DNI",
       numeroDocumento: "32123456",

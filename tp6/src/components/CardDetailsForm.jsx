@@ -146,15 +146,29 @@ const CardDetailsForm = ({ onPaymentProcess }) => {
     if (!number || number.length < 16) return "Número de tarjeta inválido. Debe tener 16 dígitos.";
     if (!pin || pin.length < 4) return "El PIN debe tener 4 dígitos.";
     if (!expirationDate) return "Debe ingresar la fecha de vencimiento."; 
-    if (!name) return "Debe ingresar el nombre completo.";
-    if (!documentType) return "Debe seleccionar un tipo de documento.";
-    if (!documentNumber) return "Debe ingresar un número de documento.";
-    if (!gateway) return "Debe seleccionar una pasarela de pago.";
+
+    const currentDate = new Date();
+    const currentMonth = String(currentDate.getMonth() + 1).padStart(2, '0'); // Mes actual (0 indexado)
+    const currentYear = String(currentDate.getFullYear()).slice(-2); // Últimos 2 dígitos del año actual
+    
+    // Validar formato de la fecha de vencimiento
     
     const [month, year] = expirationDate.split('/');
     if (!month || !year || month.length !== 2 || year.length !== 2) {
       return "Formato de fecha de vencimiento inválido. Use MM/AA.";
     }
+
+    // Comparar si la tarjeta ha expirado
+
+    if (year < currentYear || (year === currentYear && month < currentMonth)) {
+      return "La tarjeta no es vigente.";
+    }
+
+    if (!name) return "Debe ingresar el nombre completo.";
+    if (!documentType) return "Debe seleccionar un tipo de documento.";
+    if (!documentNumber) return "Debe ingresar un número de documento.";
+    if (!gateway) return "Debe seleccionar una pasarela de pago.";
+    
     return null; 
   };
 
