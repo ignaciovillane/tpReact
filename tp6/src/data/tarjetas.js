@@ -1,7 +1,8 @@
-const tarjetas = [{
+const tarjetas = [
+    {
 
       tipo: "debito",
-      numero: "4532123412341234",
+      numero: "4111111111111111",
       PIN: "1234",
       fechaVencimiento: "12/25",
       nombreCompleto: "Juan Perez",
@@ -9,8 +10,9 @@ const tarjetas = [{
       numeroDocumento: "32123456",
       saldo: "2000"
 
-},
-{
+    },
+    {
+
     tipo: "credito",
     numero: "5523123412345678",
     PIN: "5678",
@@ -18,9 +20,22 @@ const tarjetas = [{
     nombreCompleto: "Ana Garcia",
     tipoDocumento: "Pasaporte",
     numeroDocumento: "XG123456",
-    saldo: "500"
+    saldo: "2500"
 
-}];
+    },
+    {
+    
+    tipo: "debito",
+    numero: "1234567890123456",
+    PIN: "5678",
+    fechaVencimiento: "08/26",
+    nombreCompleto: "Ana Garcia",
+    tipoDocumento: "Pasaporte",
+    numeroDocumento: "XG123456",
+    saldo: "500"
+    
+}
+];
 
 
 export default tarjetas;

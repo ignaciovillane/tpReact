@@ -1,10 +1,12 @@
 import React from 'react';
-import CardDetailsForm from './CardDetailsForm';
-import Notification, { showSuccessNotification, showErrorNotification } from './Notifications'; // Importamos el CustomToast y las funciones
+import CardDetailsForm from './CardDetailsForm'; // Importamos el formulario de detalles de la tarjeta
+import Notification, { showSuccessNotification, showErrorNotification } from './Notifications'; // Importamos las notificaciones
 
+// Componente de detalles de la pagina de la tarjeta
 const CardDetailsPage = () => {
 
   const handlePaymentProcess = (message, paymentMethod, isError = false) => {
+
     // Simplificamos el mensaje de confirmación de pago
     const messageText = isError 
       ? message 
@@ -14,14 +16,14 @@ const CardDetailsPage = () => {
     if (isError) {
       showErrorNotification(messageText);
     } else {
-      showSuccessNotification(messageText);
-      
 
+      showSuccessNotification(messageText);
       showSuccessNotification(`Notificación SMS enviada a transportista`)
       showSuccessNotification(`Email enviado a transportista.`);
-      // Actualizamos el estado del pedido a "Confirmado" en sessionStorage
+
       sessionStorage.setItem("orderStatus", "Confirmado");
       sessionStorage.setItem("confirmedPaymentMethod", paymentMethod);
+
     }
   };
 

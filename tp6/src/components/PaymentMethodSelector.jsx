@@ -1,5 +1,7 @@
 import React from 'react';
 
+// Componente PaymentMethodSelector
+
 const PaymentMethodSelector = ({ paymentMethod, setPaymentMethod }) => {
   const handlePaymentMethodChange = (e) => {
     setPaymentMethod(e.target.value);

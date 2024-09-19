@@ -1,5 +1,7 @@
 import React from 'react';
 
+// Componente OrderStatus
+
 const OrderStatus = ({ orderStatus, paymentNumber }) => {
   return (
     <div>

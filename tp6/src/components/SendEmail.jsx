@@ -1,6 +1,8 @@
 // emailService.js
 import emailjs from 'emailjs-com';
 
+// Función para enviar email
+
 export const sendEmail = (transportista, paymentMethod) => {
   const templateParams = {
     transportista: transportista.name,

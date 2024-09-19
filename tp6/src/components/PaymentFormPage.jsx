@@ -1,40 +1,47 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import TransportistaSelector from './TransportistaSelector';
-import PaymentMethodSelector from './PaymentMethodSelector';
-import OrderStatus from './OrderStatus';
-import ConfirmationModal from './ConfirmationModal'; 
-import { sendEmail } from './SendEmail'; // Importamos la función
+import { useNavigate } from 'react-router-dom'; // Importamos libreria para navegar entre rutas
+import TransportistaSelector from './TransportistaSelector'; // Importamos el componente TransportistaSelector
+import PaymentMethodSelector from './PaymentMethodSelector'; // Importamos el componente PaymentMethodSelector
+import OrderStatus from './OrderStatus'; // Importamos el componente OrderStatus
+import ConfirmationModal from './ConfirmationModal'; // Importamos el componente ConfirmationModal
+import { sendEmail } from './SendEmail'; // Importamos la función de email
 import Notification, { showSuccessNotification, showErrorNotification } from './Notifications'; // Importamos el CustomToast y las funciones
 
+// Componente PaymentForm
+
 const PaymentForm = () => {
+
+  // UseState
   const [transportista, setTransportista] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("");
   const [orderStatus, setOrderStatus] = useState("Pendiente");
   const [confirmedPaymentMethod, setConfirmedPaymentMethod] = useState(null);
-  const [paymentNumber, setPaymentNumber] = useState(null); // Nuevo estado para el número de pago
+  const [paymentNumber, setPaymentNumber] = useState(null); 
   const [showModal, setShowModal] = useState(false); 
   const [paymentAction, setPaymentAction] = useState(null); 
 
   const navigate = useNavigate();
 
+  // UseEffect al renderizar la pagina
   useEffect(() => {
     const storedOrderStatus = sessionStorage.getItem("orderStatus");
     const storedPaymentMethod = sessionStorage.getItem("confirmedPaymentMethod");
-    const storedPaymentNumber = sessionStorage.getItem("paymentNumber"); // Obtener el número de pago guardado
+    const storedPaymentNumber = sessionStorage.getItem("paymentNumber"); 
 
     if (storedOrderStatus) {
-      setOrderStatus(storedOrderStatus);
+      setOrderStatus(storedOrderStatus); // Establecer el estado del pedido
     }
     
     if (storedPaymentMethod) {
-      setConfirmedPaymentMethod(storedPaymentMethod);
+      setConfirmedPaymentMethod(storedPaymentMethod); // Establecer el método de pago confirmado
     }
 
     if (storedPaymentNumber) {
-      setPaymentNumber(storedPaymentNumber); // Establecer el número de pago si ya existe
+      setPaymentNumber(storedPaymentNumber);  // Establecer el número de pago si ya existe
     }
   }, []);
+
+  // Funcion para procesar el pago
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -65,11 +72,13 @@ const PaymentForm = () => {
     }
   };
 
+  // Funcion para confirmar el pago
+
   const handleConfirm = () => {
     setShowModal(false);
 
     if (paymentAction === "contado al retirar" || paymentAction === "contado contra entrega") {
-      // Mostrar múltiples mensajes
+
       showSuccessNotification(`Pago procesado correctamente con ${paymentAction}`);
       showSuccessNotification(`Notificación SMS enviada a transportista`)
       showSuccessNotification(`Email enviado a transportista.`);
@@ -87,10 +96,14 @@ const PaymentForm = () => {
     }
   };
 
+  // Funcion para cancelar el pago
+
   const handleCancel = () => {
     setShowModal(false); 
   };
 
+  // Funcion para resetear la sesion
+  
   const handleResetSession = () => {
     sessionStorage.clear();
     setOrderStatus("Pendiente");

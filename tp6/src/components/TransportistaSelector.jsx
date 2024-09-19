@@ -1,6 +1,8 @@
 import React from 'react';
 import transportistas from '../data/transportistas';
 
+// Componente TransportistaSelector
+
 const TransportistaSelector = ({ transportista, setTransportista }) => {
 
   const handleSelectTransportista = (selectedTransportista) => {
